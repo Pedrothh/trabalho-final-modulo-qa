@@ -47,7 +47,8 @@ public class PessoaService {
                 return result;
     }
     
-    public void deletePessoa(Integer idPessoa){
+    public String deletePessoa(Integer idPessoa){
+            String result =
                 given()
                         .log().all()
                         .pathParam("idPessoa", idPessoa)
@@ -56,9 +57,11 @@ public class PessoaService {
                 .then()
                         .log().all()
                         .statusCode(200)
+                        .extract().asString();
                 ;
+                return result;
     }
-    
+
     public ContatoDTO[] buscarContato(){
 
         ContatoDTO[] result =

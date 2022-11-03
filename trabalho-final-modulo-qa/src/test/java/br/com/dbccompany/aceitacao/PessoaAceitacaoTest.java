@@ -2,20 +2,31 @@ package br.com.dbccompany.aceitacao;
 
 import br.com.dbccompany.dto.ContatoDTO;
 import br.com.dbccompany.dto.RelatorioDTO;
+import br.com.dbccompany.dto.UserPayloadDTO;
 import br.com.dbccompany.service.PessoaService;
 import br.com.dbccompany.utils.Login;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import static io.restassured.RestAssured.*;
 
 public class PessoaAceitacaoTest {
-
+    String jsonBody = lerJson("src/test/resources/data/user1.json");
     PessoaService service = new PessoaService();
+    public String lerJson(String caminhoJson) throws IOException {
+    return new String(Files.readAllBytes(Paths.get(caminhoJson)));
 
+}
 
-    @Test
-    public void deveRetornarRelatorioPessoas(){
+public PessoaAceitacaoTest() throws IOException {
+}
+
+@Test
+public void deveRetornarRelatorioPessoas(){
 
         RelatorioDTO[] resultService = service.buscarRelatorio();
 
@@ -37,5 +48,29 @@ public class PessoaAceitacaoTest {
         Assert.assertEquals(resultService[0].getDescricao(), "whatsapp");
         Assert.assertEquals(resultService[0].getIdContato(), "1");
     }
+
+
+    ////////////////////////////////////////////////
+    ///////// TESTES DO PESSOA-CONTROLLER /////////
+    ////////////////////////////////////////////////
+    @Test
+    public void testDeveAdicionarPessoaComSucesso() throws Exception {
+        UserPayloadDTO serviceResult = service.addPessoa(jsonBody);
+
+        Assert.assertEquals(serviceResult.getNome(), "Mordekaiser");
+        Assert.assertEquals(serviceResult.getCpf(), "56448824325");
+
+        service.deletePessoa(serviceResult.getId());
+    }
+
+    @Test
+    public void testDeveDeletarPessoaComSucesso() throws Exception { 
+        UserPayloadDTO serviceResult = service.addPessoa(jsonBody);
+        
+        String response = service.deletePessoa(serviceResult.getId());
+        
+        Assert.assertEquals(response, "Cadastro removido");
+    }
+
 
 }

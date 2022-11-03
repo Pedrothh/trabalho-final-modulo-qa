@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties
 public class UserPayloadDTO {
+  private Integer id;
   private String nome;
   private String dataNascimento;
   private String cpf;
