@@ -1,7 +1,10 @@
 package br.com.dbccompany.service;
 
 import br.com.dbccompany.dto.RelatorioDTO;
+import br.com.dbccompany.dto.ResponseUserDTO;
+import br.com.dbccompany.dto.UserPayloadDTO;
 import br.com.dbccompany.utils.Login;
+import io.restassured.http.ContentType;
 
 import static io.restassured.RestAssured.*;
 
@@ -25,6 +28,34 @@ public class PessoaService {
                     .extract().as(RelatorioDTO[].class);
 
         return result;
+    }
+
+    public UserPayloadDTO addPessoa(String requestBody){
+        UserPayloadDTO result =
+                given()
+                        .log().all()
+                        .contentType(ContentType.JSON)
+                        .body(requestBody)
+                .when()
+                        .get(baseUri + "/pessoa")
+                .then()
+                        .log().all()
+                        .statusCode(200)
+                        .extract().as(UserPayloadDTO.class)
+                ;
+                return result;
+    }
+    
+    public void deletePessoa(Integer idPessoa){
+                given()
+                        .log().all()
+                        .pathParam("idPessoa", idPessoa)
+                .when()
+                        .delete(baseUri + "/pessoa/{idPessoa}")
+                .then()
+                        .log().all()
+                        .statusCode(200)
+                ;
     }
 
 }
