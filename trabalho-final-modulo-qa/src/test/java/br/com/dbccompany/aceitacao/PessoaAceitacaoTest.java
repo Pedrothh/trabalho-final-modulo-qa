@@ -5,6 +5,7 @@ import br.com.dbccompany.dto.RelatorioDTO;
 import br.com.dbccompany.dto.UserDTO;
 import br.com.dbccompany.dto.UserPayloadDTO;
 import br.com.dbccompany.service.PessoaService;
+import io.restassured.response.Response;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -69,9 +70,9 @@ public class PessoaAceitacaoTest {
     public void testDeveDeletarPessoaComSucesso() throws Exception { 
         UserPayloadDTO serviceResult = service.addPessoa(jsonBody);
         
-        String response = service.deletePessoa(serviceResult.getId());
+        Response response = service.deletePessoa(serviceResult.getId());
         
-        Assert.assertEquals(response, "Cadastro removido");
+        Assert.assertEquals(response.getStatusCode(), 200);
     }
 
 

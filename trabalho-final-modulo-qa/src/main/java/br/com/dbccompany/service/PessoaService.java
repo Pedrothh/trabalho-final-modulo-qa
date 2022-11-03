@@ -5,6 +5,7 @@ import br.com.dbccompany.dto.*;
 import br.com.dbccompany.utils.*;
 
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.*;
 
@@ -53,8 +54,8 @@ public class PessoaService {
                 return result;
     }
     
-    public String deletePessoa(Integer idPessoa){
-            String result =
+    public Response deletePessoa(Integer idPessoa){
+            Response result =
                 given()
                         .log().all()
                         .pathParam("idPessoa", idPessoa)
@@ -63,7 +64,7 @@ public class PessoaService {
                 .then()
                         .log().all()
                         .statusCode(200)
-                        .extract().asString();
+                        .extract().response();
                 ;
                 return result;
     }
