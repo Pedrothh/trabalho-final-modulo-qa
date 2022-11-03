@@ -1,5 +1,6 @@
 package br.com.dbccompany.service;
 
+import br.com.dbccompany.dto.ContatoDTO;
 import br.com.dbccompany.dto.RelatorioDTO;
 import br.com.dbccompany.utils.Login;
 
@@ -23,6 +24,22 @@ public class PessoaService {
                     .log().all()
                     .statusCode(200)
                     .extract().as(RelatorioDTO[].class);
+
+        return result;
+    }
+
+    public ContatoDTO[] buscarContato(){
+
+        ContatoDTO[] result =
+                given()
+                        .log().all()
+                        .header("Authorization", tokenAdm)
+                    .when()
+                        .get(baseUri + "/contato")
+                    .then()
+                        .log().all()
+                        .statusCode(200)
+                        .extract().as(ContatoDTO[].class);
 
         return result;
     }
