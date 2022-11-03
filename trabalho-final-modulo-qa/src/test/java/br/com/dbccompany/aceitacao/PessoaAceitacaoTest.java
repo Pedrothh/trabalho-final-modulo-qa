@@ -2,20 +2,20 @@ package br.com.dbccompany.aceitacao;
 
 import br.com.dbccompany.dto.ContatoDTO;
 import br.com.dbccompany.dto.RelatorioDTO;
+import br.com.dbccompany.dto.UserDTO;
 import br.com.dbccompany.service.PessoaService;
-import br.com.dbccompany.utils.Login;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import static io.restassured.RestAssured.*;
+
 
 public class PessoaAceitacaoTest {
 
     PessoaService service = new PessoaService();
 
-
     @Test
-    public void deveRetornarRelatorioPessoas(){
+    public void testeDeveRetornarRelatorioPessoas(){
 
         RelatorioDTO[] resultService = service.buscarRelatorio();
 
@@ -28,7 +28,7 @@ public class PessoaAceitacaoTest {
     ///////// TESTES DO CONTATO-CONTROLLER /////////
     ////////////////////////////////////////////////
     @Test
-    public void deveBuscarContato(){
+    public void testeDeveBuscarContato(){
 
         ContatoDTO[] resultService = service.buscarContato();
 
@@ -40,7 +40,7 @@ public class PessoaAceitacaoTest {
     }
 
     @Test
-    public void deveBuscarContatoPeloIdPessoa() {
+    public void testeDeveBuscarContatoPeloIdPessoa() {
 
         ContatoDTO[] resultService = service.buscarContatoPeloIdPessoa();
 
@@ -49,6 +49,16 @@ public class PessoaAceitacaoTest {
         Assert.assertEquals(resultService[0].getTelefone(), "51955565585");
         Assert.assertEquals(resultService[0].getDescricao(), "whatsapp");
         Assert.assertEquals(resultService[0].getIdContato(), "1");
+    }
+
+    @Test
+    public void testeDeveCriarNovoUserAdmin(){
+
+        UserDTO resultService = service.criarUsuarioAdmin();
+
+        Assert.assertEquals(resultService.getLogin(), "alainpedrotestuser");
+        Assert.assertNotNull(resultService.getIdUsuario());
+                
     }
 
 }
