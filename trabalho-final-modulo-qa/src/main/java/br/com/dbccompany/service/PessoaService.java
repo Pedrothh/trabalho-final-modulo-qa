@@ -28,6 +28,9 @@ public class PessoaService {
         return result;
     }
 
+    /////////////////////////////////////////////////
+    ///////// METODOS DO CONTATO-CONTROLLER /////////
+    /////////////////////////////////////////////////
     public ContatoDTO[] buscarContato(){
 
         ContatoDTO[] result =
@@ -37,6 +40,24 @@ public class PessoaService {
                     .when()
                         .get(baseUri + "/contato")
                     .then()
+                        .log().all()
+                        .statusCode(200)
+                        .extract().as(ContatoDTO[].class);
+
+        return result;
+    }
+
+    public ContatoDTO[] buscarContatoPeloIdPessoa(){
+        String idPessoa = "1";
+
+        ContatoDTO[] result =
+                given()
+                        .log().all()
+                        .header("Authorization", tokenAdm)
+                        .pathParams("idPessoa", idPessoa)
+                        .when()
+                        .get(baseUri + "/contato/{idPessoa}")
+                        .then()
                         .log().all()
                         .statusCode(200)
                         .extract().as(ContatoDTO[].class);

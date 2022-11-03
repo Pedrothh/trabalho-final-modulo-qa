@@ -33,6 +33,19 @@ public class PessoaAceitacaoTest {
         ContatoDTO[] resultService = service.buscarContato();
 
         Assert.assertEquals(resultService[0].getIdPessoa(), "1");
+        Assert.assertEquals(resultService[0].getTipoContato(), "COMERCIAL");
+        Assert.assertEquals(resultService[0].getTelefone(), "51955565585");
+        Assert.assertEquals(resultService[0].getDescricao(), "whatsapp");
+        Assert.assertEquals(resultService[0].getIdContato(), "1");
+    }
+
+    @Test
+    public void deveBuscarContatoPeloIdPessoa() {
+
+        ContatoDTO[] resultService = service.buscarContatoPeloIdPessoa();
+
+        Assert.assertEquals(resultService[0].getIdPessoa(), "1");
+        Assert.assertEquals(resultService[0].getTipoContato(), "COMERCIAL");
         Assert.assertEquals(resultService[0].getTelefone(), "51955565585");
         Assert.assertEquals(resultService[0].getDescricao(), "whatsapp");
         Assert.assertEquals(resultService[0].getIdContato(), "1");
