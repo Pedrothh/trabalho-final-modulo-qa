@@ -1,10 +1,10 @@
 package br.com.dbccompany.service;
 
-import br.com.dbccompany.dto.ContatoDTO;
-import br.com.dbccompany.dto.RelatorioDTO;
-import br.com.dbccompany.dto.UserDTO;
-import br.com.dbccompany.utils.Cadastrar;
-import br.com.dbccompany.utils.Login;
+import br.com.dbccompany.dto.*;
+
+import br.com.dbccompany.utils.*;
+
+import io.restassured.http.ContentType;
 
 import static io.restassured.RestAssured.*;
 
@@ -16,6 +16,10 @@ public class PessoaService {
     String tokenAdm = new Login().autenticacaoAdmin();
 
     UserDTO novoUsuario = new Cadastrar().criarUsuarioAdmin();
+
+    /////////////////////////////////////////////////
+    ///////// METODOS DA PESSOA-CONTROLLER /////////
+    /////////////////////////////////////////////////
 
     public RelatorioDTO[] buscarRelatorio(){
 
@@ -33,9 +37,39 @@ public class PessoaService {
         return result;
     }
 
+    public UserPayloadDTO addPessoa(String requestBody){
+        UserPayloadDTO result =
+                given()
+                        .log().all()
+                        .contentType(ContentType.JSON)
+                        .body(requestBody)
+                .when()
+                        .get(baseUri + "/pessoa")
+                .then()
+                        .log().all()
+                        .statusCode(200)
+                        .extract().as(UserPayloadDTO.class)
+                ;
+                return result;
+    }
+    
+    public void deletePessoa(Integer idPessoa){
+                given()
+                        .log().all()
+                        .pathParam("idPessoa", idPessoa)
+                .when()
+                        .delete(baseUri + "/pessoa/{idPessoa}")
+                .then()
+                        .log().all()
+                        .statusCode(200)
+                ;
+    }
+    
+
     /////////////////////////////////////////////////
     ///////// METODOS DO CONTATO-CONTROLLER /////////
     /////////////////////////////////////////////////
+    
     public ContatoDTO[] buscarContato(){
 
         ContatoDTO[] result =
@@ -70,6 +104,10 @@ public class PessoaService {
         return result;
     }
 
+    /////////////////////////////////////////////////
+    ///////// METODOS DO AUTH-CONTROLLER ////////////
+    /////////////////////////////////////////////////
+    
     public UserDTO criarUsuarioAdmin(){
         UserDTO result =
                 given()
