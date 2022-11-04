@@ -143,6 +143,24 @@ public class PessoaAceitacaoTest {
     }
 
     @Test
+    public void testDeveRetornarListaComContatosPassandoIdPessoa(){
+        UserPayloadDTO serviceResult = service.addPessoa(jsonBody);
+
+        UserPayloadDTO[] result = service.consultaListaComContatos(serviceResult.getIdPessoa());
+
+        Assert.assertEquals(result[0].getEmail(), "morde@dbccompany.com.br");
+
+        service.deletePessoa(serviceResult.getIdPessoa());
+    }
+
+    @Test
+    public void testDeveRetornarListaComContatosSemPassarIdPessoa(){
+
+        UserPayloadDTO[] result = service.consultaListaComContatos();
+        Assert.assertNotNull(result[0]);
+    }
+
+    @Test
     public void testeDeveBuscarContatoPeloIdPessoa() {
 
         ContatoDTO[] resultService = service.buscarContatoPeloIdPessoa();

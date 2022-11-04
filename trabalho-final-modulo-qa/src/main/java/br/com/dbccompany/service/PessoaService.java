@@ -160,6 +160,34 @@ public class PessoaService {
         return result;
     }
 
+    public UserPayloadDTO[] consultaListaComContatos(Integer idPessoa){
+        UserPayloadDTO[] result =
+                given()
+                        .log().all()
+                        .header("Authorization", tokenAdm)
+                        .queryParam("idPessoa", idPessoa)
+                        .when()
+                        .get(baseUri + "/pessoa/lista-com-contatos")
+                        .then()
+                        .log().all()
+                        .extract().as(UserPayloadDTO[].class)
+                ;
+        return result;
+    }
+
+    public UserPayloadDTO[] consultaListaComContatos(){
+        UserPayloadDTO[] result =
+                given()
+                        .log().all()
+                        .header("Authorization", tokenAdm)
+                        .when()
+                        .get(baseUri + "/pessoa/lista-com-contatos")
+                        .then()
+                        .log().all()
+                        .extract().as(UserPayloadDTO[].class)
+                ;
+        return result;
+    }
     /////////////////////////////////////////////////
     ///////// METODOS DO CONTATO-CONTROLLER /////////
     /////////////////////////////////////////////////
