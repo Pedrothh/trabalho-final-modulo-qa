@@ -4,6 +4,7 @@ import br.com.dbccompany.dto.ContatoDTO;
 import br.com.dbccompany.dto.RelatorioDTO;
 import br.com.dbccompany.dto.UserDTO;
 import br.com.dbccompany.dto.UserPayloadDTO;
+import br.com.dbccompany.service.ContatoService;
 import br.com.dbccompany.service.PessoaService;
 import io.restassured.response.Response;
 
@@ -18,7 +19,10 @@ import java.nio.file.Paths;
 
 public class PessoaAceitacaoTest {
     String jsonBody = lerJson("src/test/resources/data/user1.json");
+
     String jsonBody2 = lerJson("src/test/resources/data/user2.json");
+    
+    String jsonBodyContato = lerJson("src/test/resources/data/contato1user1.json");
 
     PessoaService service = new PessoaService();
 
@@ -29,29 +33,8 @@ public class PessoaAceitacaoTest {
         return new String(Files.readAllBytes(Paths.get(caminhoJson)));
     }
 
-    @Test
-    public void testeDeveRetornarRelatorioPessoas(){
-
-        RelatorioDTO[] resultService = service.buscarRelatorio();
-
-        Assert.assertEquals(resultService[0].getNomePessoa().toUpperCase(), "Maicon Machado Gerardi".toUpperCase());
-
-
-    }
-
-    ////////////////////////////////////////////////
-    ///////// TESTES DO CONTATO-CONTROLLER /////////
-    ////////////////////////////////////////////////
-    @Test
-    public void testeDeveBuscarContato(){
-
-        ContatoDTO[] resultService = service.buscarContato();
-
-        Assert.assertEquals(resultService[0].getIdPessoa(), "1");
-        Assert.assertEquals(resultService[0].getTipoContato(), "COMERCIAL");
-        Assert.assertEquals(resultService[0].getTelefone(), "51955565585");
-        Assert.assertEquals(resultService[0].getDescricao(), "whatsapp");
-        Assert.assertEquals(resultService[0].getIdContato(), "1");
+   
+    public PessoaAceitacaoTest() throws IOException {
     }
 
 
@@ -59,20 +42,20 @@ public class PessoaAceitacaoTest {
     ///////// TESTES DO PESSOA-CONTROLLER /////////
     ////////////////////////////////////////////////
     @Test
-    public void testDeveAdicionarPessoaComSucesso() throws Exception {
-        UserPayloadDTO serviceResult = service.addPessoa(jsonBody);
+    public void testDeveAdicionarPessoaComSucesso()  {
+        UserPayloadDTO serviceResult = pessoaService.addPessoa(jsonBody);
 
         Assert.assertEquals(serviceResult.getNome(), "Mordekaiser");
         Assert.assertEquals(serviceResult.getCpf(), "56448824325");
 
-        service.deletePessoa(serviceResult.getId());
+        pessoaService.deletePessoa(serviceResult.getId());
     }
 
     @Test
-    public void testDeveDeletarPessoaComSucesso() throws Exception { 
-        UserPayloadDTO serviceResult = service.addPessoa(jsonBody);
+    public void testDeveDeletarPessoaComSucesso()  {
+        UserPayloadDTO serviceResult = pessoaService.addPessoa(jsonBody);
         
-        Response response = service.deletePessoa(serviceResult.getId());
+        Response response = pessoaService.deletePessoa(serviceResult.getId());
         
         Assert.assertEquals(response.getStatusCode(), 200);
     }
@@ -168,22 +151,27 @@ public class PessoaAceitacaoTest {
         //Assert.assertNotNull(result);
     }
     
+
     @Test
-    public void testeDeveBuscarContatoPeloIdPessoa() {
+    public void testeDeveRetornarRelatorioPessoas(){
 
-        ContatoDTO[] resultService = service.buscarContatoPeloIdPessoa();
+        RelatorioDTO[] resultService = pessoaService.buscarRelatorio();
 
-        Assert.assertEquals(resultService[0].getIdPessoa(), "1");
-        Assert.assertEquals(resultService[0].getTipoContato(), "COMERCIAL");
-        Assert.assertEquals(resultService[0].getTelefone(), "51955565585");
-        Assert.assertEquals(resultService[0].getDescricao(), "whatsapp");
-        Assert.assertEquals(resultService[0].getIdContato(), "1");
+        Assert.assertEquals(resultService[0].getNomePessoa().toUpperCase(), "Maicon Machado Gerardi".toUpperCase());
+
+
     }
+
+
+
+    ////////////////////////////////////////////////
+    ///////// TESTES DO AUTH-CONTROLLER /////////
+    ////////////////////////////////////////////////
 
     @Test
     public void testeDeveCriarNovoUserAdmin(){
 
-        UserDTO resultService = service.criarUsuarioAdmin();
+        UserDTO resultService = pessoaService.criarUsuarioAdmin();
 
         Assert.assertEquals(resultService.getLogin(), "alainpedrotestuser");
         Assert.assertNotNull(resultService.getIdUsuario());

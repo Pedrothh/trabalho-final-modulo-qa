@@ -22,23 +22,9 @@ public class PessoaService {
     ///////// METODOS DA PESSOA-CONTROLLER /////////
     /////////////////////////////////////////////////
 
-    public RelatorioDTO[] buscarRelatorio(){
-
-        RelatorioDTO[] result =
-        given()
-                    .log().all()
-                    .header("Authorization", tokenAdm)
-                .when()
-                    .get(baseUri + "/pessoa/relatorio")
-                .then()
-                    .log().all()
-                    .statusCode(200)
-                    .extract().as(RelatorioDTO[].class);
-
-        return result;
-    }
 
     public UserPayloadDTO addPessoa(String requestBody){
+
         UserPayloadDTO result =
                 given()
                         .log().all()
@@ -111,6 +97,7 @@ public class PessoaService {
                         .get(baseUri + "/pessoa/relatorio")
                         .then()
                         .log().all()
+                        .statusCode(200)
                         .extract().as(UserPayloadDTO[].class);
         ;
         return result;
@@ -226,21 +213,8 @@ public class PessoaService {
 
     public ContatoDTO[] buscarContatoPeloIdPessoa(){
         String idPessoa = "1";
+=======
 
-        ContatoDTO[] result =
-                given()
-                        .log().all()
-                        .header("Authorization", tokenAdm)
-                        .pathParams("idPessoa", idPessoa)
-                        .when()
-                        .get(baseUri + "/contato/{idPessoa}")
-                        .then()
-                        .log().all()
-                        .statusCode(200)
-                        .extract().as(ContatoDTO[].class);
-
-        return result;
-    }
 
     /////////////////////////////////////////////////
     ///////// METODOS DO AUTH-CONTROLLER ////////////
@@ -250,9 +224,9 @@ public class PessoaService {
         UserDTO result =
                 given()
                         .body(novoUsuario)
-                        .when()
+                .when()
                         .post(baseUri + "/auth/create")
-                        .then()
+                .then()
                         .log().all()
                         .statusCode(200)
                         .extract().as(UserDTO.class);
