@@ -1,28 +1,25 @@
-package br.com.dbccompany.utils;
+package br.com.dbcompany.utils;
 
 import io.restassured.http.ContentType;
 
-import static io.restassured.RestAssured.*;
-
+import static io.restassured.RestAssured.given;
 public class Login {
-
     String baseUri = "http://vemser-dbc.dbccompany.com.br:39000/vemser/dbc-pessoa-api";
-
 
     public String autenticacaoAdmin(){
         String result =
         given()
                 .log().all()
                 .contentType(ContentType.JSON)
-                .body("{\"login\" : \"alainpedrotestuser\", \"senha\" : \"123\"}"
+                .body("{\"login\" : \"admin\", \"senha\" : \"123\"}"
                 )
-            .when()
+        .when()
                 .post(baseUri + "/auth")
-            .then()
+        .then()
                 .log().all()
                 .statusCode(200)
-                .extract().asString();
-
-        return result;
+                .extract().asString()
+        ;
+        return  result;
     }
 }
