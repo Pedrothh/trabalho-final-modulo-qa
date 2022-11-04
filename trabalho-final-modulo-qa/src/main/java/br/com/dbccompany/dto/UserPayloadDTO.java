@@ -12,4 +12,11 @@ public class UserPayloadDTO {
   private String dataNascimento;
   private String cpf;
   private String email;
+  private String nomePet;
+  private String numeroContato;
+  private String cep;
+  private String cidade;
+  private String estado;
+  private String pais;
+  private String nomePessoa;
 }

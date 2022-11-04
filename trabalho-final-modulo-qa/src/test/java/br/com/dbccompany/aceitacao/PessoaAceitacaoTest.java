@@ -14,17 +14,19 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static io.restassured.RestAssured.*;
 
 
 public class PessoaAceitacaoTest {
     String jsonBody = lerJson("src/test/resources/data/user1.json");
+    String jsonBody2 = lerJson("src/test/resources/data/user2.json");
+
     PessoaService service = new PessoaService();
-        public String lerJson(String caminhoJson) throws IOException {
-        return new String(Files.readAllBytes(Paths.get(caminhoJson)));
-    }
 
     public PessoaAceitacaoTest() throws IOException {
+    }
+
+    public String lerJson(String caminhoJson) throws IOException {
+        return new String(Files.readAllBytes(Paths.get(caminhoJson)));
     }
 
     @Test
@@ -75,6 +77,41 @@ public class PessoaAceitacaoTest {
         Assert.assertEquals(response.getStatusCode(), 200);
     }
 
+    @Test
+    public void testDeveAtualizarPessoaComSucesso() throws Exception {
+        UserPayloadDTO serviceResult = service.addPessoa(jsonBody);
+
+        UserPayloadDTO result = service.atualizaPessoa(serviceResult.getIdPessoa(), jsonBody2);
+
+        Assert.assertEquals(result.getNome(), "Lulu");
+        Assert.assertEquals(result.getEmail(), "lulu@gmail.com.br");
+
+        service.deletePessoa(serviceResult.getIdPessoa());
+    }
+
+    @Test
+    public void testDeveRetornarUmaPessoaPeloCpf(){
+        UserPayloadDTO serviceResult = service.addPessoa(jsonBody);
+
+        UserPayloadDTO result = service.consultaCpfPessoa(serviceResult.getCpf());
+
+        Assert.assertEquals(result.getNome(), "Mordekaiser");
+        Assert.assertEquals(result.getEmail(), "morde@dbccompany.com.br");
+
+        service.deletePessoa(serviceResult.getIdPessoa());
+    }
+
+    @Test
+    public void testDeveRetornarRelatorioDeUmaPessoa(){
+        UserPayloadDTO serviceResult = service.addPessoa(jsonBody);
+
+        UserPayloadDTO[] result = service.consultaRelatorioPorPessoa(serviceResult.getIdPessoa());
+
+        Assert.assertEquals(result[0].getNomePessoa(), "Mordekaiser");
+        Assert.assertEquals(result[0].getEmail(), "morde@dbccompany.com.br");
+
+        service.deletePessoa(serviceResult.getIdPessoa());
+    }
 
     @Test
     public void testeDeveBuscarContatoPeloIdPessoa() {

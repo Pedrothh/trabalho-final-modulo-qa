@@ -42,6 +42,7 @@ public class PessoaService {
         UserPayloadDTO result =
                 given()
                         .log().all()
+                        .header("Authorization", tokenAdm)
                         .contentType(ContentType.JSON)
                         .body(requestBody)
                 .when()
@@ -58,6 +59,7 @@ public class PessoaService {
             Response result =
                 given()
                         .log().all()
+                        .header("Authorization", tokenAdm)
                         .pathParam("idPessoa", idPessoa)
                 .when()
                         .delete(baseUri + "/pessoa/{idPessoa}")
@@ -68,7 +70,51 @@ public class PessoaService {
                 ;
                 return result;
     }
-    
+    public UserPayloadDTO atualizaPessoa(Integer idPessoa, String requestBody){
+        UserPayloadDTO result =
+                given()
+                        .log().all()
+                        .header("Authorization", tokenAdm)
+                        .pathParam("idPessoa", idPessoa)
+                        .contentType(ContentType.JSON)
+                        .body(requestBody)
+                        .when()
+                        .put(baseUri + "/pessoa/{idPessoa}")
+                        .then()
+                        .log().all()
+                        .extract().as(UserPayloadDTO.class);
+        ;
+        return result;
+    }
+    public UserPayloadDTO consultaCpfPessoa(String cpf){
+        UserPayloadDTO result =
+                given()
+                        .log().all()
+                        .header("Authorization", tokenAdm)
+                        .pathParam("cpf", cpf)
+                        .when()
+                        .get(baseUri + "/pessoa/{cpf}/cpf")
+                        .then()
+                        .log().all()
+                        .extract().as(UserPayloadDTO.class);
+        ;
+        return result;
+    }
+
+    public UserPayloadDTO[] consultaRelatorioPorPessoa(Integer idPessoa){
+        UserPayloadDTO[] result =
+                given()
+                        .log().all()
+                        .header("Authorization", tokenAdm)
+                        .queryParam("idPessoa", idPessoa)
+                        .when()
+                        .get(baseUri + "/pessoa/relatorio")
+                        .then()
+                        .log().all()
+                        .extract().as(UserPayloadDTO[].class);
+        ;
+        return result;
+    }
 
     /////////////////////////////////////////////////
     ///////// METODOS DO CONTATO-CONTROLLER /////////
