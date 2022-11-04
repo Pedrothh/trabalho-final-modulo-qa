@@ -39,6 +39,7 @@ public class PessoaService {
     }
 
     public UserPayloadDTO addPessoa(String requestBody){
+
         UserPayloadDTO result =
                 given()
                         .log().all()
@@ -70,43 +71,7 @@ public class PessoaService {
     }
     
 
-    /////////////////////////////////////////////////
-    ///////// METODOS DO CONTATO-CONTROLLER /////////
-    /////////////////////////////////////////////////
-    
-    public ContatoDTO[] buscarContato(){
 
-        ContatoDTO[] result =
-                given()
-                        .log().all()
-                        .header("Authorization", tokenAdm)
-                    .when()
-                        .get(baseUri + "/contato")
-                    .then()
-                        .log().all()
-                        .statusCode(200)
-                        .extract().as(ContatoDTO[].class);
-
-        return result;
-    }
-
-    public ContatoDTO[] buscarContatoPeloIdPessoa(){
-        String idPessoa = "1";
-
-        ContatoDTO[] result =
-                given()
-                        .log().all()
-                        .header("Authorization", tokenAdm)
-                        .pathParams("idPessoa", idPessoa)
-                        .when()
-                        .get(baseUri + "/contato/{idPessoa}")
-                        .then()
-                        .log().all()
-                        .statusCode(200)
-                        .extract().as(ContatoDTO[].class);
-
-        return result;
-    }
 
     /////////////////////////////////////////////////
     ///////// METODOS DO AUTH-CONTROLLER ////////////
@@ -116,9 +81,9 @@ public class PessoaService {
         UserDTO result =
                 given()
                         .body(novoUsuario)
-                        .when()
+                .when()
                         .post(baseUri + "/auth/create")
-                        .then()
+                .then()
                         .log().all()
                         .statusCode(200)
                         .extract().as(UserDTO.class);
