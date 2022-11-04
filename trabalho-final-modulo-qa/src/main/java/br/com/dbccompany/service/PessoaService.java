@@ -188,6 +188,22 @@ public class PessoaService {
                 ;
         return result;
     }
+
+    public UserPayloadDTO[] consultaListaPessoasComData(String dtInicial, String dtFinal){
+        UserPayloadDTO[] result =
+                given()
+                        .log().all()
+                        .header("Authorization", tokenAdm)
+                        .queryParam("data", dtInicial)
+                        .queryParam("dtFinal", dtFinal)
+                        .when()
+                        .get(baseUri + "/pessoa/data-nascimento")
+                        .then()
+                        .log().all()
+                        .extract().as(UserPayloadDTO[].class)
+                ;
+        return result;
+    }
     /////////////////////////////////////////////////
     ///////// METODOS DO CONTATO-CONTROLLER /////////
     /////////////////////////////////////////////////

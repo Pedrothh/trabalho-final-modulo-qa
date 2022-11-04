@@ -161,6 +161,14 @@ public class PessoaAceitacaoTest {
     }
 
     @Test
+    public void testDeveRetornarListaComPessoasComNascimentoNoIntervaloDasDatas(){
+
+        //UserPayloadDTO[] result = service.consultaListaPessoasComData("2001-12-08", "2023-12-08");
+
+        //Assert.assertNotNull(result);
+    }
+    
+    @Test
     public void testeDeveBuscarContatoPeloIdPessoa() {
 
         ContatoDTO[] resultService = service.buscarContatoPeloIdPessoa();
