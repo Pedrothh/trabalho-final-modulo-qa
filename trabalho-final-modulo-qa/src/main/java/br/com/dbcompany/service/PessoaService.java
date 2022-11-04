@@ -1,9 +1,9 @@
 package br.com.dbcompany.service;
 
 import br.com.dbcompany.dto.RelatorioDTO;
+import br.com.dbcompany.dto.UserPageDTO;
 import br.com.dbcompany.dto.UserPayloadDTO;
 import br.com.dbcompany.utils.Login;
-import com.sun.tools.xjc.reader.xmlschema.bindinfo.BIConversion;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
@@ -209,6 +209,22 @@ public class PessoaService {
                 .then()
                        .log().all()
                 .extract().as(UserPayloadDTO[].class)
+                ;
+       return result;
+    }
+    public UserPageDTO consultaListaDePessoaPorPagina(Integer pagina, Integer tamanhoDasPaginas){
+       UserPageDTO result =
+               given()
+                .log().all()
+                .header("Authorization", tokenAdm)
+                .queryParam("pagina", pagina)
+                .queryParam("tamanhoDasPaginas", tamanhoDasPaginas)
+                .when()
+                .log().all()
+                .get(baseUri + "/pessoa")
+                .then()
+                       .log().all()
+                .extract().as(UserPageDTO.class)
                 ;
        return result;
     }

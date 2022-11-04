@@ -1,6 +1,7 @@
 package br.com.dbcompany.aceitacao;
 
 import br.com.dbcompany.dto.RelatorioDTO;
+import br.com.dbcompany.dto.UserPageDTO;
 import br.com.dbcompany.dto.UserPayloadDTO;
 import br.com.dbcompany.service.PessoaService;
 import io.restassured.response.Response;
@@ -150,5 +151,15 @@ public class PessoaAceitacaoTest {
 
         service.deletePessoa(serviceUser.getIdPessoa());
     }
+    @Test
+    public void testDeveRetornarListaDePessoaPorPagina(){
+        Integer pagina = 1;
+        Integer tamanhoDasPaginas = 3;
+        UserPageDTO serviceResult = service.consultaListaDePessoaPorPagina(pagina, tamanhoDasPaginas);
+        Assert.assertEquals(serviceResult.getPage(), pagina);
+        Assert.assertEquals(serviceResult.getContent().length, 3);
+
+    }
+
 
 }
