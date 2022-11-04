@@ -32,13 +32,9 @@ public class EnderecoAceitacaoTest {
 
     @Test
     public void testDeveBuscarEndereco(){
-        UserPayloadDTO serviceResult = pessoaService.addPessoa(jsonBody);
-
         ListaEnderecoDTO result = enderecoService.buscarEndereco();
 
         Assert.assertNotNull(result);
-
-        pessoaService.deletePessoa(serviceResult.getIdPessoa());
 
     }
 
@@ -53,6 +49,15 @@ public class EnderecoAceitacaoTest {
         UserEnderecoDTO result = enderecoService.buscarEnderecoPorIdEndereco(serviceEndResult.getIdEndereco());
 
         pessoaService.deletePessoa(serviceResult.getIdPessoa());
+
+    }
+
+    @Test
+    public void testDeveBuscaEnderecoPorPaís(){
+        String país = "brasil";
+        UserEnderecoDTO[] result = enderecoService.buscaEnderecoPorPaís(país);
+
+        Assert.assertNotNull(result);
 
     }
 }

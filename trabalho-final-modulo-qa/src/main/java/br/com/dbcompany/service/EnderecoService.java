@@ -2,6 +2,7 @@ package br.com.dbcompany.service;
 
 import br.com.dbcompany.dto.ListaEnderecoDTO;
 import br.com.dbcompany.dto.UserEnderecoDTO;
+import br.com.dbcompany.dto.UserPayloadDTO;
 import br.com.dbcompany.utils.Login;
 
 import static io.restassured.RestAssured.*;
@@ -55,6 +56,22 @@ public class EnderecoService {
                         .then()
                         .log().all()
                         .extract().as(UserEnderecoDTO.class)
+                ;
+        return result;
+    }
+
+    public UserEnderecoDTO[] buscaEnderecoPorPaís(String país){
+
+        UserEnderecoDTO[] result =
+                given()
+                        .log().all()
+                        .header("Authorization", tokenAdm)
+                        .queryParam("País", país)
+                        .when()
+                        .get(baseUri + "/endereco/retorna-por-pais")
+                        .then()
+                        .log().all()
+                        .extract().as(UserEnderecoDTO[].class)
                 ;
         return result;
 
