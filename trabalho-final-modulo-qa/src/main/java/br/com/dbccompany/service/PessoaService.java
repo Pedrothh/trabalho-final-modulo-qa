@@ -116,6 +116,50 @@ public class PessoaService {
         return result;
     }
 
+    public UserPayloadDTO[] consultaListaCompletaPessoa(Integer idPessoa){
+        UserPayloadDTO[] result =
+                given()
+                        .log().all()
+                        .header("Authorization", tokenAdm)
+                        .queryParam("idPessoa", idPessoa)
+                        .when()
+                        .get(baseUri + "/pessoa/lista-completa")
+                        .then()
+                        .log().all()
+                        .extract().as(UserPayloadDTO[].class)
+                ;
+        return result;
+    }
+
+    public UserPayloadDTO[] consultaListaDeEnderecos(Integer idPessoa){
+        UserPayloadDTO[] result =
+                given()
+                        .log().all()
+                        .header("Authorization", tokenAdm)
+                        .queryParam("idPessoa", idPessoa)
+                        .when()
+                        .get(baseUri + "/pessoa/lista-com-enderecos")
+                        .then()
+                        .log().all()
+                        .extract().as(UserPayloadDTO[].class)
+                ;
+        return result;
+    }
+
+    public UserPayloadDTO[] consultaListaDeEnderecos(){
+        UserPayloadDTO[] result =
+                given()
+                        .log().all()
+                        .header("Authorization", tokenAdm)
+                        .when()
+                        .get(baseUri + "/pessoa/lista-com-enderecos")
+                        .then()
+                        .log().all()
+                        .extract().as(UserPayloadDTO[].class)
+                ;
+        return result;
+    }
+
     /////////////////////////////////////////////////
     ///////// METODOS DO CONTATO-CONTROLLER /////////
     /////////////////////////////////////////////////
