@@ -15,6 +15,7 @@ import java.nio.file.Paths;
 public class PessoaAceitacaoTest {
     String jsonBody = lerJson("src/test/resources/data/user1.json");
     String jsonBody2 = lerJson("src/test/resources/data/user2.json");
+    String jsonBody3 = lerJson("src/test/resources/data/user3.json");
     PessoaService service = new PessoaService();
 
     public PessoaAceitacaoTest() throws IOException {
@@ -33,6 +34,12 @@ public class PessoaAceitacaoTest {
 
         service.deletePessoa(serviceResult.getIdPessoa());
     }
+    @Test
+    public void testAdicionarPessoaSemPreencherNomeRetornaCodigo400() {
+        UserPayloadDTO serviceResult = service.addPessoa(jsonBody3);
+
+        Assert.assertEquals(serviceResult.getStatus(), "400");
+    }
 
     @Test
     public void testDeveDeletarPessoaComSucesso() {
@@ -41,6 +48,16 @@ public class PessoaAceitacaoTest {
         Response response = service.deletePessoa(serviceResult.getIdPessoa());
 
         Assert.assertEquals(response.getStatusCode(), 200);
+    }
+    @Test
+    public void testDeletarPessoaPassandoIdInexistenteRetornaCodigo404() {
+        UserPayloadDTO serviceResult = service.addPessoa(jsonBody);
+        Integer id = serviceResult.getIdPessoa();
+        service.deletePessoa(serviceResult.getIdPessoa());
+
+        Response response = service.deletePessoa(id);
+
+        Assert.assertEquals(response.getStatusCode(), 404);
     }
 
     @Test
@@ -54,9 +71,19 @@ public class PessoaAceitacaoTest {
 
         service.deletePessoa(serviceResult.getIdPessoa());
     }
+    @Test
+    public void testAtualizarPessoaPassandoIdInexistenteRetornaCodigo404() {
+        UserPayloadDTO serviceResult = service.addPessoa(jsonBody);
+        Integer id = serviceResult.getIdPessoa();
+        service.deletePessoa(serviceResult.getIdPessoa());
+
+        UserPayloadDTO result = service.atualizaPessoa(id, jsonBody2);
+
+        Assert.assertEquals(result.getStatus(), "404");
+    }
 
     @Test
-    public void testDeveRetornarUmaPessoaPeloCpf(){
+    public void testDeveRetornarUmaPessoaConsultandoPeloCpf(){
         UserPayloadDTO serviceResult = service.addPessoa(jsonBody);
 
         UserPayloadDTO result = service.consultaCpfPessoa(serviceResult.getCpf());
@@ -65,6 +92,13 @@ public class PessoaAceitacaoTest {
         Assert.assertEquals(result.getEmail(), "morde@dbccompany.com.br");
 
         service.deletePessoa(serviceResult.getIdPessoa());
+    }
+    @Test
+    public void testBuscarUmaPessoaSemPassarCpfValidoNaoRetornaNada(){
+        UserPayloadDTO serviceResult = service.addPessoa(jsonBody);
+        service.deletePessoa(serviceResult.getIdPessoa());
+
+       // UserPayloadDTO result = service.consultaCpfPessoa("serviceResult.getCpf()");
     }
 
     @Test
@@ -78,6 +112,15 @@ public class PessoaAceitacaoTest {
 
         service.deletePessoa(serviceResult.getIdPessoa());
     }
+    @Test
+    public void testBuscarRelatorioPassandoIdPessoaInexistenteRetornaVazio(){
+        UserPayloadDTO serviceResult = service.addPessoa(jsonBody);
+        service.deletePessoa(serviceResult.getIdPessoa());
+
+        UserPayloadDTO[] result = service.consultaRelatorioPorPessoa(serviceResult.getIdPessoa());
+
+        Assert.assertEquals(result.length, 0);
+    }
 
     @Test
     public void testDeveRetornarListaCompletaDeUmaPessoa(){
@@ -89,9 +132,19 @@ public class PessoaAceitacaoTest {
 
         service.deletePessoa(serviceResult.getIdPessoa());
     }
+    @Test
+    public void testBuscarListaCompletaPassandoIdPessoaInexistenteRetornaVazio(){
+        UserPayloadDTO serviceResult = service.addPessoa(jsonBody);
+        service.deletePessoa(serviceResult.getIdPessoa());
+
+        UserPayloadDTO[] result = service.consultaListaCompletaPessoa(serviceResult.getIdPessoa());
+
+        Assert.assertEquals(result.length, 0);
+
+    }
 
     @Test
-    public void testDeveRetornarListaDeEnderecosPasandoIdPessoa(){
+    public void testDeveRetornarListaDeEnderecosPassandoIdPessoa(){
         UserPayloadDTO serviceResult = service.addPessoa(jsonBody);
 
         UserPayloadDTO[] result = service.consultaListaDeEnderecos(serviceResult.getIdPessoa());
@@ -99,6 +152,16 @@ public class PessoaAceitacaoTest {
         Assert.assertEquals(result[0].getEmail(), "morde@dbccompany.com.br");
 
         service.deletePessoa(serviceResult.getIdPessoa());
+    }
+    @Test
+    public void testBuscarListaDeEnderecosPassandoIdPessoaInexistenteRetornaCodigo404(){
+        UserPayloadDTO serviceResult = service.addPessoa(jsonBody);
+        service.deletePessoa(serviceResult.getIdPessoa());
+
+       // UserPayloadDTO result = service.consultaListaDeEnderecos(serviceResult.getIdPessoa());
+
+        //Assert.assertEquals(result.getStatus(), "404");
+
     }
 
     @Test
@@ -134,6 +197,14 @@ public class PessoaAceitacaoTest {
 
         Assert.assertEquals(response.getStatusCode(), 200);
     }
+    @Test
+    public void testBuscarListaComPessoasPassandoDataNascimentoInvalidaRetornaCodigo400(){
+        String data = "23/08/aaaa";
+        String dtFinal = "23/08/2007";
+        Response response = service.consultaListaPessoasComData(data, dtFinal);
+
+        Assert.assertEquals(response.getStatusCode(), 400);
+    }
 
     @Test
     public void testDeveRetornarPessoaPeloNome(){
@@ -146,6 +217,15 @@ public class PessoaAceitacaoTest {
     }
     @Test
     public void testDeveRetornarListaDePessoaPorPagina(){
+        Integer pagina = 1;
+        Integer tamanhoDasPaginas = 3;
+        UserPageDTO serviceResult = service.consultaListaDePessoaPorPagina(pagina, tamanhoDasPaginas);
+        Assert.assertEquals(serviceResult.getPage(), pagina);
+        Assert.assertEquals(serviceResult.getContent().length, 3);
+
+    }
+    @Test
+    public void testBuscarListaDePessoaPorPagina(){
         Integer pagina = 1;
         Integer tamanhoDasPaginas = 3;
         UserPageDTO serviceResult = service.consultaListaDePessoaPorPagina(pagina, tamanhoDasPaginas);

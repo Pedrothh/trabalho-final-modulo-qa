@@ -38,7 +38,6 @@ public class PessoaService {
                         .post(baseUri + "/pessoa")
                         .then()
                         .log().all()
-                        .statusCode(200)
                         .extract().as(UserPayloadDTO.class)
                 ;
         return result;
@@ -54,7 +53,6 @@ public class PessoaService {
                         .delete(baseUri + "/pessoa/{idPessoa}")
                         .then()
                         .log().all()
-                        .statusCode(200)
                         .extract().response();
         ;
         return result;
@@ -86,6 +84,7 @@ public class PessoaService {
                         .get(baseUri + "/pessoa/{cpf}/cpf")
                 .then()
                         .log().all()
+                        .statusCode(200)
                         .extract().as(UserPayloadDTO.class);
         ;
         return result;
@@ -101,7 +100,8 @@ public class PessoaService {
                         .get(baseUri + "/pessoa/relatorio")
                 .then()
                         .log().all()
-                        .extract().as(UserPayloadDTO[].class);
+                        .extract().as(UserPayloadDTO[].class)
+                ;
         ;
         return result;
     }

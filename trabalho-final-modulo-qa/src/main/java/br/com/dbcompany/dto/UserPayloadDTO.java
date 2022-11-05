@@ -20,5 +20,9 @@ public class UserPayloadDTO {
     private String nomePessoa;
     private ContatoDTO[] contatos;
     private UserEnderecoDTO[] enderecos;
+    private String timestamp;
+    private String status;
+    private String[] errors;
+    private String message;
 }
 
