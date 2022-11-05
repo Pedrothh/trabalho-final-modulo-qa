@@ -25,14 +25,7 @@ public class PessoaAceitacaoTest {
     }
 
     @Test
-    public void deveRetornarRelatorioPessoas(){
-        RelatorioDTO[] resultService = service.buscarRelatorio();
-
-       // Assert.assertEquals(resultService[0].getNomePessoa().toUpperCase(), "Maicon Machado Gerardi".toUpperCase());
-    }
-
-    @Test
-    public void testDeveAdicionarPessoaComSucesso() throws Exception {
+    public void testDeveAdicionarPessoaComSucesso() {
         UserPayloadDTO serviceResult = service.addPessoa(jsonBody);
 
         Assert.assertEquals(serviceResult.getNome(), "Mordekaiser");
@@ -42,7 +35,7 @@ public class PessoaAceitacaoTest {
     }
 
     @Test
-    public void testDeveDeletarPessoaComSucesso() throws Exception {
+    public void testDeveDeletarPessoaComSucesso() {
         UserPayloadDTO serviceResult = service.addPessoa(jsonBody);
 
         Response response = service.deletePessoa(serviceResult.getIdPessoa());
@@ -51,7 +44,7 @@ public class PessoaAceitacaoTest {
     }
 
     @Test
-    public void testDeveAtualizarPessoaComSucesso() throws Exception {
+    public void testDeveAtualizarPessoaComSucesso() {
         UserPayloadDTO serviceResult = service.addPessoa(jsonBody);
 
         UserPayloadDTO result = service.atualizaPessoa(serviceResult.getIdPessoa(), jsonBody2);
