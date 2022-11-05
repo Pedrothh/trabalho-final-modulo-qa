@@ -221,6 +221,14 @@ public class PessoaAceitacaoTest {
         service.deletePessoa(serviceUser.getIdPessoa());
     }
     @Test
+    public void testConsultarPessoaPeloNomePassandoNomeInvalidoRetornaVazio(){
+        String nome = "1234";
+
+        UserPayloadDTO[] serviceResult = service.consultaPessoaPeloNome(nome);
+        Assert.assertEquals(serviceResult.length, 0);
+
+    }
+    @Test
     public void testDeveRetornarListaDePessoaPorPagina(){
         Integer pagina = 1;
         Integer tamanhoDasPaginas = 3;
