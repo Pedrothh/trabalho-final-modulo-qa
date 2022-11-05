@@ -2,6 +2,7 @@ package br.com.dbcompany.service;
 
 import br.com.dbcompany.dto.*;
 import br.com.dbcompany.utils.*;
+import io.restassured.http.ContentType;
 
 import static io.restassured.RestAssured.given;
 
@@ -32,9 +33,7 @@ public class ContatoService {
         return result;
     }
 
-    public ContatoDTO[] buscarContatoPeloIdPessoa(){
-        String idPessoa = "66";
-
+    public ContatoDTO[] buscarContatoPeloIdPessoa(Integer idPessoa){
         ContatoDTO[] result =
                 given()
                         .log().all()
@@ -50,14 +49,15 @@ public class ContatoService {
         return result;
     }
 
-    public ContatoDTO criarContatoPeloIdPessoa() {
-        String idPessoa = "66";
+    public ContatoDTO criarContatoPeloIdPessoa(Integer idPessoa, String requestBody) {
 
         ContatoDTO result =
                 given()
                         .log().all()
                         .header("Authorization", tokenAdm)
                         .pathParams("idPessoa", idPessoa)
+                        .contentType(ContentType.JSON)
+                        .body(requestBody)
                         .when()
                         .post(baseUri + "/contato/{idPessoa}")
                         .then()

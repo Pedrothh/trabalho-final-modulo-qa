@@ -6,10 +6,10 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties
 public class ContatoDTO {
-    private String idPessoa;
+    private Integer idPessoa;
     private String tipoContato;
     private String telefone;
     private String descricao;
-    private String idContato;
+    private Integer idContato;
 
 }

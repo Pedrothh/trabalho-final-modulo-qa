@@ -10,10 +10,13 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 public class ContatoAceitacaoTest {
 
     String jsonBody = lerJson("src/test/resources/data/user1.json");
+
+    String jsonBodyContato = lerJson("src/test/resources/data/contato1.json");
     ContatoService contatoService = new ContatoService();
     PessoaService pessoaService = new PessoaService();
 
@@ -31,25 +34,37 @@ public class ContatoAceitacaoTest {
     @Test
     public void testeDeveBuscarContato(){
 
+        // instanciando uma pessoa
+        UserPayloadDTO serviceAddPessoa = pessoaService.addPessoa(jsonBody);
+        // instanciando um contato à pessoa instanciada
+        ContatoDTO serviceAddContato = contatoService.criarContatoPeloIdPessoa(serviceAddPessoa.getIdPessoa(), jsonBodyContato);
+
+        // executando o método testado
         ContatoDTO[] resultService = contatoService.buscarContato();
 
-        Assert.assertEquals(resultService[0].getIdPessoa(), "1");
-        Assert.assertEquals(resultService[0].getTipoContato(), "COMERCIAL");
-        Assert.assertEquals(resultService[0].getTelefone(), "51955565585");
-        Assert.assertEquals(resultService[0].getDescricao(), "whatsapp");
-        Assert.assertEquals(resultService[0].getIdContato(), "1");
+        // teste de assertiva
+        Assert.assertNotNull(resultService);
+
+        // limpando a massa de teste
+        pessoaService.deletePessoa(serviceAddPessoa.getIdPessoa());
     }
 
     @Test
     public void testeDeveBuscarContatoPeloIdPessoa() {
+        // instanciando uma pessoa
+        UserPayloadDTO serviceAddPessoa = pessoaService.addPessoa(jsonBody);
+        // instanciando um contato à pessoa instanciada
+        ContatoDTO serviceAddContato = contatoService.criarContatoPeloIdPessoa(serviceAddPessoa.getIdPessoa(), jsonBodyContato);
 
-        ContatoDTO[] resultService = contatoService.buscarContatoPeloIdPessoa();
+        ContatoDTO[] resultService = contatoService.buscarContatoPeloIdPessoa(serviceAddPessoa.getIdPessoa());
 
-        Assert.assertEquals(resultService[0].getIdPessoa(), "1");
-        Assert.assertEquals(resultService[0].getTipoContato(), "COMERCIAL");
-        Assert.assertEquals(resultService[0].getTelefone(), "51955565585");
-        Assert.assertEquals(resultService[0].getDescricao(), "whatsapp");
-        Assert.assertEquals(resultService[0].getIdContato(), "1");
+        Assert.assertEquals(resultService[0].getIdPessoa(), serviceAddPessoa.getIdPessoa());
+        Assert.assertEquals(resultService[0].getTipoContato(), serviceAddContato.getTipoContato());
+        Assert.assertEquals(resultService[0].getTelefone(), serviceAddContato.getTelefone());
+        Assert.assertEquals(resultService[0].getDescricao(), serviceAddContato.getDescricao());
+        Assert.assertEquals(resultService[0].getIdContato(), serviceAddContato.getIdContato());
+
+        pessoaService.deletePessoa(serviceAddPessoa.getIdPessoa());
     }
 /*
     @Test
