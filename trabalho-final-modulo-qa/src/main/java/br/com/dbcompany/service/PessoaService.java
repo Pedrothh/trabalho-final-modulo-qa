@@ -121,8 +121,8 @@ public class PessoaService {
         return result;
     }
 
-    public UserPayloadDTO[] consultaListaDeEnderecos(Integer idPessoa){
-        UserPayloadDTO[] result =
+    public String consultaListaDeEnderecos(Integer idPessoa){
+        String result =
                 given()
                         .log().all()
                         .header("Authorization", tokenAdm)
@@ -130,8 +130,8 @@ public class PessoaService {
                 .when()
                         .get(baseUri + "/pessoa/lista-com-enderecos")
                 .then()
-                        .log().all()
-                        .extract().as(UserPayloadDTO[].class)
+                        .log().ifStatusCodeIsEqualTo(200)
+                        .extract().asString()
                 ;
         return result;
     }

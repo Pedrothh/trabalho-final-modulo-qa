@@ -4,7 +4,9 @@ import br.com.dbcompany.dto.RelatorioDTO;
 import br.com.dbcompany.dto.UserPageDTO;
 import br.com.dbcompany.dto.UserPayloadDTO;
 import br.com.dbcompany.service.PessoaService;
+import com.google.gson.Gson;
 import io.restassured.response.Response;
+import io.restassured.response.ResponseBody;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -145,23 +147,26 @@ public class PessoaAceitacaoTest {
 
     @Test
     public void testDeveRetornarListaDeEnderecosPassandoIdPessoa(){
+        Gson g = new Gson();
         UserPayloadDTO serviceResult = service.addPessoa(jsonBody);
 
-        UserPayloadDTO[] result = service.consultaListaDeEnderecos(serviceResult.getIdPessoa());
+        String result = service.consultaListaDeEnderecos(serviceResult.getIdPessoa());
+        UserPayloadDTO[] s = g.fromJson(result, UserPayloadDTO[].class);
 
-        Assert.assertEquals(result[0].getEmail(), "morde@dbccompany.com.br");
+        Assert.assertEquals(s[0].getEmail(), "morde@dbccompany.com.br");
 
         service.deletePessoa(serviceResult.getIdPessoa());
     }
     @Test
     public void testBuscarListaDeEnderecosPassandoIdPessoaInexistenteRetornaCodigo404(){
+        Gson g = new Gson();
         UserPayloadDTO serviceResult = service.addPessoa(jsonBody);
         service.deletePessoa(serviceResult.getIdPessoa());
 
-       // UserPayloadDTO result = service.consultaListaDeEnderecos(serviceResult.getIdPessoa());
+        String result = service.consultaListaDeEnderecos(serviceResult.getIdPessoa());
+        UserPayloadDTO s = g.fromJson(result, UserPayloadDTO.class);
 
-        //Assert.assertEquals(result.getStatus(), "404");
-
+        Assert.assertEquals(s.getStatus(), "404");
     }
 
     @Test
