@@ -11,5 +11,8 @@ public class ContatoDTO {
     private String telefone;
     private String descricao;
     private Integer idContato;
+    private String timestamp;
+    private String status;
+    private String message;
 
 }

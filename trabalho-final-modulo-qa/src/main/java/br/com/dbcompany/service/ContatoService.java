@@ -41,7 +41,6 @@ public class ContatoService {
                 .get(baseUri + "/contato/{idPessoa}")
                 .then()
                 .log().all()
-                .statusCode(200)
                 .extract().as(ContatoDTO[].class);
     }
 
@@ -57,7 +56,6 @@ public class ContatoService {
                 .post(baseUri + "/contato/{idPessoa}")
                 .then()
                 .log().all()
-                .statusCode(200)
                 .extract().as(ContatoDTO.class);
     }
 
@@ -72,7 +70,6 @@ public class ContatoService {
                 .put(baseUri + "/contato/{idContato}")
                 .then()
                 .log().all()
-                .statusCode(200)
                 .extract().as(ContatoDTO.class);
     }
 
@@ -85,7 +82,6 @@ public class ContatoService {
                 .delete(baseUri + "/contato/{idContato}")
                 .then()
                 .log().all()
-                .statusCode(200)
                 .extract().response();
     }
 }

@@ -3,6 +3,7 @@ package br.com.dbcompany.aceitacao;
 import br.com.dbcompany.dto.ContatoDTO;
 import br.com.dbcompany.dto.UserPayloadDTO;
 import br.com.dbcompany.service.ContatoService;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
 import org.testng.Assert;
@@ -23,6 +24,7 @@ public class ContatoAceitacaoTest extends PessoaAceitacaoTest {
 
     ////////////////////////////////////////////////
     ///////// TESTES DO CONTATO-CONTROLLER /////////
+    ////////////// CENÁRIOS POSITIVOS //////////////
     ////////////////////////////////////////////////
     @Test
     public void testeDeveBuscarContato(){
@@ -44,23 +46,19 @@ public class ContatoAceitacaoTest extends PessoaAceitacaoTest {
 
     @Test
     public void testeDeveBuscarContatoPeloIdPessoa() {
-        // instanciando uma pessoa
+
         UserPayloadDTO serviceAddPessoa = service.addPessoa(jsonBody);
 
-        // instanciando um contato à pessoa instanciada
         ContatoDTO serviceAddContato = contatoService.criarContatoPeloIdPessoa(serviceAddPessoa.getIdPessoa(), jsonBodyContato);
 
-        // executando o método testado
         ContatoDTO[] resultService = contatoService.buscarContatoPeloIdPessoa(serviceAddPessoa.getIdPessoa());
 
-        // teste de assertivas
         Assert.assertEquals(resultService[0].getIdPessoa(), serviceAddPessoa.getIdPessoa());
         Assert.assertEquals(resultService[0].getTipoContato(), serviceAddContato.getTipoContato());
         Assert.assertEquals(resultService[0].getTelefone(), serviceAddContato.getTelefone());
         Assert.assertEquals(resultService[0].getDescricao(), serviceAddContato.getDescricao());
         Assert.assertEquals(resultService[0].getIdContato(), serviceAddContato.getIdContato());
 
-        // limpando a massa de teste
         service.deletePessoa(serviceAddPessoa.getIdPessoa());
     }
 
@@ -108,6 +106,33 @@ public class ContatoAceitacaoTest extends PessoaAceitacaoTest {
 
         service.deletePessoa(serviceAddPessoa.getIdPessoa());
 
+    }
+
+    ////////////////////////////////////////////////
+    ///////// TESTES DO CONTATO-CONTROLLER /////////
+    ////////////// CENÁRIOS NEGATIVOS //////////////
+    ////////////////////////////////////////////////
+
+    @Test
+    public void testeDeveTentarCadastrarNovoContatoComIdPessoaInvalido(){
+        ContatoDTO resultAddContatoIdPessoaInvalido = contatoService.criarContatoPeloIdPessoa(995112022, jsonBodyContato);
+
+        Assert.assertEquals(resultAddContatoIdPessoaInvalido.getStatus(), "404");
+        Assert.assertEquals(resultAddContatoIdPessoaInvalido.getMessage(), "ID da pessoa nao encontrada");
+    }
+
+    @Test
+    public void testeDeveTentarDeletarContatoComIdPessoaInvalido(){
+        Response resultDeletarContatoIdPessoaInvalido = contatoService.deletarContatoPeloIdContato(995112022);
+
+        Assert.assertEquals(resultDeletarContatoIdPessoaInvalido.getStatusCode(), 404);
+    }
+
+    @Test
+    public void testeDeveTentarAtualizarContatoComIdPessoaInvalido(){
+        ContatoDTO resultAtualizarContatoIdPessoaInvalido = contatoService.atualizarContatoPeloIdContato(995112022, jsonBodyContato2);
+
+        Assert.assertEquals(resultAtualizarContatoIdPessoaInvalido.getStatus(), "404");
     }
 
 
