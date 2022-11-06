@@ -84,7 +84,6 @@ public class PessoaService {
                         .get(baseUri + "/pessoa/{cpf}/cpf")
                 .then()
                         .log().all()
-                        .statusCode(200)
                         .extract().as(UserPayloadDTO.class);
         ;
         return result;
@@ -150,8 +149,8 @@ public class PessoaService {
         return result;
     }
 
-    public UserPayloadDTO[] consultaListaComContatos(Integer idPessoa){
-        UserPayloadDTO[] result =
+    public String consultaListaComContatos(Integer idPessoa){
+        String result =
                 given()
                         .log().all()
                         .header("Authorization", tokenAdm)
@@ -160,7 +159,7 @@ public class PessoaService {
                         .get(baseUri + "/pessoa/lista-com-contatos")
                         .then()
                         .log().all()
-                        .extract().as(UserPayloadDTO[].class)
+                        .extract().asString()
                 ;
         return result;
     }

@@ -178,12 +178,13 @@ public class PessoaAceitacaoTest {
 
     @Test
     public void testDeveRetornarListaComContatosPassandoIdPessoa(){
+        Gson g = new Gson();
         UserPayloadDTO serviceResult = service.addPessoa(jsonBody);
 
-        UserPayloadDTO[] result = service.consultaListaComContatos(serviceResult.getIdPessoa());
+        String result = service.consultaListaComContatos(serviceResult.getIdPessoa());
 
-        Assert.assertEquals(result[0].getEmail(), "morde@dbccompany.com.br");
-
+        UserPayloadDTO[] s = g.fromJson(result, UserPayloadDTO[].class);
+        Assert.assertEquals(s[0].getEmail(), "morde@dbccompany.com.br");
         service.deletePessoa(serviceResult.getIdPessoa());
     }
 
@@ -192,6 +193,19 @@ public class PessoaAceitacaoTest {
 
         UserPayloadDTO[] result = service.consultaListaComContatos();
         Assert.assertNotNull(result[0]);
+    }
+    @Test
+    public void testBuscarListaComContatosPassandoIdPessoaInexistenteRetornaCodigo404(){
+        Gson g = new Gson();
+        UserPayloadDTO serviceResult = service.addPessoa(jsonBody);
+        service.deletePessoa(serviceResult.getIdPessoa());
+
+
+        String result = service.consultaListaComContatos(serviceResult.getIdPessoa());
+
+        UserPayloadDTO s = g.fromJson(result, UserPayloadDTO.class);
+        Assert.assertEquals(s.getStatus(), "404");
+
     }
 
     @Test
