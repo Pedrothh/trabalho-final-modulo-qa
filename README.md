@@ -6,4 +6,4 @@ Plano de Testes:
 ![Imagem do plano](images/planodetestes.jpeg)
 
 Testes realizados:
-![Imagem do plano](images/testes.PJG)
+![Imagem do plano](images/testes.JPG)
