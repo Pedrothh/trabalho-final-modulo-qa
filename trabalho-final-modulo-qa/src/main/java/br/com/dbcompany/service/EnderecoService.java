@@ -45,7 +45,7 @@ public class EnderecoService {
     // BUG NO QUERYPARAM
     public UserEnderecoDTO addEndereco(Integer idPessoa, String requestBody){
 
-        UserEnderecoDTO result =
+        try {UserEnderecoDTO result =
                 given()
                         .log().all()
                         .header("Authorization", tokenAdm)
@@ -57,7 +57,10 @@ public class EnderecoService {
                         .log().all()
                         .extract().as(UserEnderecoDTO.class)
                 ;
-        return result;
+        return result;} catch (Exception error){
+            System.err.println("Deu ruim aqui! " + error.getMessage());
+        }
+        return null;
     }
 
     public UserEnderecoDTO[] buscaEnderecoPorPaís(String país){

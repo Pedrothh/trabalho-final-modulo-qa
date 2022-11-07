@@ -16,6 +16,8 @@ public class ContatoAceitacaoTest extends PessoaAceitacaoTest {
 
     String jsonBodyContato = lerJson("src/test/resources/data/contato1.json");
     String jsonBodyContato2 = lerJson("src/test/resources/data/contato2.json");
+
+    String jsonBodyContato3 = lerJson("src/test/resources/data/contato3.json");
     ContatoService contatoService = new ContatoService();
 
     public ContatoAceitacaoTest() throws IOException {
@@ -133,6 +135,19 @@ public class ContatoAceitacaoTest extends PessoaAceitacaoTest {
         ContatoDTO resultAtualizarContatoIdPessoaInvalido = contatoService.atualizarContatoPeloIdContato(995112022, jsonBodyContato2);
 
         Assert.assertEquals(resultAtualizarContatoIdPessoaInvalido.getStatus(), "404");
+        Assert.assertEquals(resultAtualizarContatoIdPessoaInvalido.getMessage(), "{idContato} não encontrado");
+    }
+
+    @Test
+    public void testeDeveTentarAtualizarContatoSemBody(){
+        UserPayloadDTO serviceAddPessoa = service.addPessoa(jsonBody);
+        ContatoDTO resultAddContato = contatoService.criarContatoPeloIdPessoa(serviceAddPessoa.getIdPessoa(), jsonBodyContato);
+
+        Response resultAtualizarContatoIdPessoaInvalido = contatoService.atualizarContatoPeloIdContatoSemBody(resultAddContato.getIdContato(), jsonBodyContato3);
+
+        Assert.assertEquals(resultAtualizarContatoIdPessoaInvalido, null);
+
+        service.deletePessoa(serviceAddPessoa.getIdPessoa());
     }
 
 

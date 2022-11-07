@@ -60,4 +60,15 @@ public class EnderecoAceitacaoTest {
         Assert.assertNotNull(result);
 
     }
+
+    @Test
+    public void testeDeveAddEnderecoPorIdPessoa(){
+        UserPayloadDTO serviceResult = pessoaService.addPessoa(jsonBody);
+
+        UserEnderecoDTO serviceAddEnd = enderecoService.addEndereco(serviceResult.getIdPessoa(), jsonBodyEndereco);
+
+        Assert.assertEquals(serviceAddEnd.getIdPessoa(), serviceResult.getIdPessoa());
+
+        pessoaService.deletePessoa(serviceResult.getIdPessoa());
+    }
 }
